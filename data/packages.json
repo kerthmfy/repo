@@ -1,0 +1,33 @@
+{
+  "repo": {
+    "name": "KMY Repo",
+    "tagline": "iOS 6 apps and tweaks, made to feel native.",
+    "url": "http://kerthmfy.github.io/repo/",
+    "https_url": "https://kerthmfy.github.io/repo/",
+    "github": "https://github.com/kerthmfy/repo"
+  },
+  "packages": [
+    {
+      "slug": "marquee",
+      "package": "com.kerthmfy.marquee.app",
+      "tag": "Simkl client",
+      "description": [
+        "A standalone, native Simkl client for iOS 6.",
+        "For You, Library, Search and Profile live in an iOS 6 card stack, with poster-led detail pages and a season-selectable episode guide."
+      ],
+      "minimum_os": "6.0",
+      "icon": "assets/icons/marquee.png",
+      "screenshots": [
+        "assets/screenshots/marquee/attachment-2.png",
+        "assets/screenshots/marquee/attachment-1.png",
+        "assets/screenshots/marquee/attachment-0.png"
+      ],
+      "source": "https://github.com/kerthmfy/Marquee-ios6",
+      "changelog": [
+        "1.0.1 — Publishing verification and version bump.",
+        "1.0 — Initial public release."
+      ],
+      "featured": true
+    }
+  ]
+}
