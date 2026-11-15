@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<title>KMY Repo — iOS 6 apps and tweaks, made to feel native.</title>
+<meta name="description" content="iOS 6 apps and tweaks, made to feel native.">
+<link rel="canonical" href="https://kerthmfy.github.io/repo/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="KMY Repo">
+<meta property="og:title" content="KMY Repo — iOS 6 apps and tweaks, made to feel native.">
+<meta property="og:description" content="iOS 6 apps and tweaks, made to feel native.">
+<meta property="og:url" content="https://kerthmfy.github.io/repo/">
+<meta property="og:image" content="https://kerthmfy.github.io/repo/assets/og.png">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="CydiaIcon.png">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html">
+      <span class="nav-mark">KMY</span>
+      <span class="nav-title">KMY Repo</span>
+    </a>
+    <nav class="nav-links">
+      <a class="nav-link" href="index.html">Home</a>
+      <a class="nav-link" href="index.html#packages">Packages</a>
+      <a class="nav-link" href="index.html#install">Install</a>
+      <a class="nav-link" href="https://github.com/kerthmfy/repo">GitHub</a>
+    </nav>
+    <div class="clear"></div>
+  </div>
+</header>
+<main class="wrap">
+  <section class="hero card">
+    <div class="monogram">KMY</div>
+    <h1>KMY Repo</h1>
+    <p class="tagline">iOS 6 apps and tweaks, made to feel native.</p>
+    <p class="hero-buttons">
+      <a class="btn btn-blue" href="#install">How to install</a>
+      <a class="btn btn-cream" href="#packages">Browse packages</a>
+    </p>
+  </section>
+
+  <h2 class="section-label" id="install">Add this source in Cydia</h2>
+  <div class="card install-card">
+    <p class="install-lead">Add the KMY source once. Cydia will then offer every app here, including updates.</p>
+    <div class="source-row">
+      <div class="source-field" id="source-url">http://kerthmfy.github.io/repo/</div>
+      <button type="button" class="btn btn-blue copy-btn" data-copy="http://kerthmfy.github.io/repo/">Copy</button>
+    </div>
+    <p class="center"><a class="btn btn-green btn-wide" href="cydia://url/https://cydia.saurik.com/api/share#?source=http%3A%2F%2Fkerthmfy.github.io%2Frepo%2F">Add to Cydia</a></p>
+    <p class="note">If Cydia warns that the source is unsigned, tap <strong>Add Anyway</strong>. The packages themselves are still installed normally.</p>
+    <ol class="steps"><li><span class="step-number">1</span>Open <strong>Cydia</strong> and choose <strong>Sources</strong>.</li><li><span class="step-number">2</span>Tap <strong>Edit</strong>, then <strong>Add</strong>.</li><li><span class="step-number">3</span>Enter the source above, tap <strong>Add Source</strong>, then search for the app.</li></ol>
+  </div>
+
+  <div id="packages"></div>
+  <h2 class="section-label">Featured package</h2>
+<div class="card featured">
+    <img class="app-icon app-icon-lg" src="assets/icons/marquee.png" alt="" width="96" height="96">
+    <div class="featured-body">
+      <div class="featured-heading">
+        <h3>Marquee</h3>
+        <span class="version-chip">1.0</span>
+      </div>
+      <p class="pkg-tag">Simkl client &middot; iOS 6.0+</p>
+      <p>A standalone, native Simkl client for iOS 6.</p>
+      <p><a class="btn btn-blue" href="p/marquee/index.html">View package &#8250;</a></p>
+    </div>
+    <div class="clear"></div>
+  </div>
+  
+
+  <div class="card about-strip">
+    <h2>Built for old hardware</h2>
+    <p>Every package here is made for iOS 6, with native UIKit controls and no modern runtime dependencies. The source and the catalog are plain static files, so they load quickly even on an iPhone 4S.</p>
+  </div>
+</main>
+<footer class="footer">
+  <div class="footer-inner">
+    <a class="tab" href="index.html"><span class="tab-icon">&#8962;</span>Home</a>
+    <a class="tab" href="index.html#packages"><span class="tab-icon">&#9638;</span>Packages</a>
+    <a class="tab" href="index.html#install"><span class="tab-icon">&#8595;</span>Install</a>
+    <a class="tab" href="https://github.com/kerthmfy/repo"><span class="tab-icon tab-code">&lt;/&gt;</span>Source</a>
+    <div class="footer-note">KMY Repo &middot; Static, fast, iOS 6 friendly</div>
+  </div>
+</footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

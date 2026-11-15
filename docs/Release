@@ -1,0 +1,21 @@
+Origin: KMY
+Label: KMY Repo
+Suite: stable
+Version: 1.0
+Codename: ios
+Architectures: iphoneos-arm
+Components: main
+Description: iOS 6 apps and tweaks by KMY.
+Date: Sun, 15 Nov 2026 01:29:32 UTC
+MD5Sum:
+ 2a96e75a47b1b476628432d4249c789c 694 Packages
+ 93f18b9e98a28cb2ae5cc3101e580efa 501 Packages.bz2
+ 24e7ba29abfd231d37c8493396b60d4f 462 Packages.gz
+SHA1:
+ f186076ceefd4fba18c19990d4ac33e605f7b322 694 Packages
+ 8942cce7435eb0221ab3c6b6356d3ac6eac71e8f 501 Packages.bz2
+ 048bae400531e7edb6560467a7709593fb74c651 462 Packages.gz
+SHA256:
+ 7154118715721e504f5c1d61c92ffb3e06ff3386589aec70b5cfb0252c1ca4eb 694 Packages
+ ac46a0f0a75f2d5b1e1de0322a343c8e3a63e0ab79eb956ea3b0719e0b60c002 501 Packages.bz2
+ 1285a7f309f250ae4bf08e6d1fb8e2ba2f0a34a18a72cbe770290f0c67f02ceb 462 Packages.gz
