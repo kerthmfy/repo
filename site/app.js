@@ -4,6 +4,7 @@
 
   function fallbackCopy(text, done) {
     var area = document.createElement('textarea');
+    var copied = false;
     area.value = text;
     area.setAttribute('readonly', 'readonly');
     area.style.position = 'fixed';
@@ -13,17 +14,19 @@
     area.select();
     area.setSelectionRange(0, text.length);
     try {
-      document.execCommand('copy');
+      copied = document.execCommand('copy');
     } catch (ignore) {
       /* iOS 6 may refuse; the URL is still visible and selectable. */
     }
     document.body.removeChild(area);
-    done();
+    done(copied);
   }
 
   function copyText(text, done) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(done, function () {
+      navigator.clipboard.writeText(text).then(function () {
+        done(true);
+      }, function () {
         fallbackCopy(text, done);
       });
       return;
@@ -40,8 +43,8 @@
       var original = button.textContent;
       var text = button.getAttribute('data-copy');
 
-      copyText(text, function () {
-        button.textContent = 'Copied';
+      copyText(text, function (copied) {
+        button.textContent = copied ? 'Copied' : 'Select';
         window.setTimeout(function () {
           button.textContent = original;
         }, 1500);

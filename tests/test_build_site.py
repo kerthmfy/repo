@@ -120,6 +120,60 @@ class BuildSiteTests(unittest.TestCase):
         self.assertTrue((self.root / "docs" / "assets" / "app.js").is_file())
         self.assertIn("Page not found", self.read("docs/404.html"))
 
+    def test_404_uses_absolute_links_for_nested_paths(self):
+        build_site.write_site(self.root)
+
+        page = self.read("docs/404.html")
+
+        self.assertIn('href="https://kerthmfy.github.io/repo/index.html"', page)
+        self.assertIn('href="https://kerthmfy.github.io/repo/assets/styles.css"', page)
+        self.assertIn('src="https://kerthmfy.github.io/repo/assets/app.js"', page)
+
+    def test_write_site_prunes_stale_package_pages(self):
+        stale = self.root / "docs" / "p" / "old"
+        stale.mkdir(parents=True)
+        (stale / "index.html").write_text("old page", encoding="utf-8")
+
+        build_site.write_site(self.root)
+
+        self.assertFalse(stale.exists())
+
+    def test_index_renders_every_featured_package(self):
+        second = json.loads(json.dumps(self.manifest["packages"][0]))
+        second.update(
+            {
+                "slug": "second",
+                "package": "com.example.second",
+                "tag": "Second app",
+                "icon": "assets/icons/second.png",
+                "screenshots": [],
+                "featured": True,
+            }
+        )
+        self.manifest["packages"].append(second)
+        self.write_manifest()
+        self.write_packages(
+            PACKAGES_TEXT
+            + "\n"
+            + "Package: com.example.second\n"
+            "Name: Second App\n"
+            "Version: 2.0\n"
+            "Architecture: iphoneos-arm\n"
+            "Section: Utilities\n"
+            "Size: 2048\n"
+            "Filename: debs/com.example.second_2.0_iphoneos-arm.deb\n"
+            "Description: Second app.\n"
+        )
+
+        build_site.write_site(self.root)
+
+        index = self.read("docs/index.html")
+        self.assertIn("Featured packages", index)
+        self.assertIn("Marquee", index)
+        self.assertIn("Second App", index)
+        self.assertIn('href="p/second/index.html"', index)
+        self.assertTrue((self.root / "docs" / "p" / "second" / "index.html").is_file())
+
     def test_index_has_repo_name_package_version_and_https_source(self):
         build_site.write_site(self.root)
 
@@ -179,6 +233,28 @@ class BuildSiteTests(unittest.TestCase):
 
         self.assertIn("com.kerthmfy.marquee.app", str(caught.exception))
         self.assertIn("docs/Packages", str(caught.exception))
+
+    def test_extra_packages_entry_without_manifest_raises(self):
+        self.write_packages(
+            PACKAGES_TEXT
+            + "\n"
+            + "Package: com.example.extra\n"
+            "Version: 9.9\n"
+        )
+
+        with self.assertRaises(ValueError) as caught:
+            build_site.write_site(self.root)
+
+        self.assertIn("com.example.extra", str(caught.exception))
+        self.assertIn("data/packages.json", str(caught.exception))
+
+    def test_real_stylesheet_is_ios6_safe_and_displays_main(self):
+        css = (ROOT / "site" / "styles.css").read_text(encoding="utf-8")
+
+        self.assertIn("main {", css)
+        self.assertIn("display: block;", css)
+        for feature in ("var(--", "display: grid", "display: flex", "flex-direction:"):
+            self.assertNotIn(feature, css)
 
 
 if __name__ == "__main__":

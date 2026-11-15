@@ -6,16 +6,16 @@ Codename: ios
 Architectures: iphoneos-arm
 Components: main
 Description: iOS 6 apps and tweaks by KMY.
-Date: Sun, 15 Nov 2026 01:51:53 UTC
+Date: Sun, 15 Nov 2026 02:28:38 UTC
 MD5Sum:
  cb3e27df8e8a20723ba50da7f89fa2fe 700 Packages
  acb00257a9a9ed59036ef570fb06b888 500 Packages.bz2
- b7ae3d9a24a3602cca205f8355dc6068 464 Packages.gz
+ bdff16b70d4a81842bfe864ce3d095bb 464 Packages.gz
 SHA1:
  b760a15a7a8fc351d65d5df28b7e9477952d5bbb 700 Packages
  2ce94594ff0c7d4c71cf6208f24c5626cd117167 500 Packages.bz2
- b4584494e72f17b4b70cf0bf0fb97ba7fd78ede7 464 Packages.gz
+ 4b2b8fd8fa12d0b93a47ad7bb44a0a20ea7ce74d 464 Packages.gz
 SHA256:
  fc392924915b004b61a5fcf13449116ad7d84d784362edba4262574b6f0c6211 700 Packages
  fbfd4e3b2a85f8cc209c094d715171e6d1c386e93f546a604c20201e00f26642 500 Packages.bz2
- daace9f3a38be31158f9f6691defb490661bb53cb92290669b5ccf231596befc 464 Packages.gz
+ 93eb434cb795b8b48eb80fb42e5ec1f8e7435cfec298974487ad61eb3e1398d9 464 Packages.gz

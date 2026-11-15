@@ -284,9 +284,10 @@ def index_page(repo, manifest, published):
 
     featured_html = ""
     if featured:
+        label = "Featured package" if len(featured) == 1 else "Featured packages"
         featured_html = (
-            '<h2 class="section-label">Featured package</h2>\n'
-            + featured_card(featured[0], published)
+            '<h2 class="section-label">%s</h2>\n' % label
+            + "\n".join(featured_card(package, published) for package in featured)
         )
 
     grid_html = ""
@@ -479,19 +480,24 @@ def package_page(repo, package, metadata):
 
 
 def not_found_page(repo):
-    """A small, friendly 404 that still works without JavaScript."""
+    """A small, friendly 404 that still works without JavaScript.
+
+    GitHub Pages serves this file for missing paths at any depth, so every
+    asset and link is absolute instead of relative to the requested path.
+    """
+    root_url = site_url(repo)
     body = """<main class="wrap">
   <section class="card empty-card">
     <h1>Page not found</h1>
     <p>That page is not part of the KMY repo. The source and package list are still one tap away.</p>
-    <p><a class="btn btn-blue" href="index.html">Back to the catalog</a></p>
+    <p><a class="btn btn-blue" href="%(root)sindex.html">Back to the catalog</a></p>
   </section>
-</main>"""
+</main>""" % {"root": escape(root_url)}
     return page_shell(
         repo,
         "Page not found — %s" % repo.get("name", "KMY Repo"),
         "The requested page was not found in the KMY repo.",
-        "",
+        root_url,
         site_url(repo),
         body,
     )
@@ -527,6 +533,19 @@ def write_site(repo_root):
                 % (package_id, packages_path)
             )
 
+    # The reverse check keeps a manually imported .deb from disappearing from
+    # the catalog while remaining installable through APT.
+    manifest_path = root / "data" / "packages.json"
+    manifest_ids = {
+        package.get("package", "") for package in manifest.get("packages", [])
+    }
+    for package_id in published:
+        if package_id not in manifest_ids:
+            raise ValueError(
+                "package %s is in %s but missing from %s; add a manifest entry"
+                % (package_id, packages_path, manifest_path)
+            )
+
     assets = root / "docs" / "assets"
     assets.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(root / "site" / "styles.css", assets / "styles.css")
@@ -538,6 +557,11 @@ def write_site(repo_root):
     (root / "docs" / "404.html").write_text(
         not_found_page(manifest.get("repo", {})), encoding="utf-8"
     )
+
+    # Package pages are generated; prune ones whose package left the manifest.
+    pages_root = root / "docs" / "p"
+    if pages_root.exists():
+        shutil.rmtree(pages_root)
 
     for package in manifest.get("packages", []):
         page_dir = root / "docs" / "p" / package.get("slug", "")

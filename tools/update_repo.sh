@@ -55,48 +55,92 @@ if [ "$PUSH" -eq 1 ] && [ "$COMMIT" -eq 0 ]; then
   exit 2
 fi
 
-[ -d docs/debs ] || { echo "missing docs/debs" >&2; exit 1; }
-[ -f data/packages.json ] || { echo "missing data/packages.json" >&2; exit 1; }
 [ -d docs ] || { echo "missing docs/" >&2; exit 1; }
+[ -d docs/debs ] || { echo "missing docs/debs" >&2; exit 1; }
+[ -d data ] || { echo "missing data/" >&2; exit 1; }
+[ -d site ] || { echo "missing site/" >&2; exit 1; }
+[ -f data/packages.json ] || { echo "missing data/packages.json" >&2; exit 1; }
 
-# One .deb per package. Two versions would make dpkg-scanpackages pick one
-# arbitrarily, so stop before the indexes can disagree with the site.
-DUPLICATES="$(find docs/debs -maxdepth 1 -name '*.deb' -exec basename {} \; |
-  awk -F_ '{count[$1]++} END {for (p in count) if (count[p] > 1) print p}' |
-  sort)"
+SCRATCH="$(mktemp -d "${TMPDIR:-/tmp}/kmy-index.XXXXXX")"
+trap 'rm -rf "$SCRATCH"' EXIT
+
+# Identify packages from their control metadata, not their filenames. A renamed
+# .deb still counts as a second copy of the same package.
+IDENTITY="$SCRATCH/debs.tsv"
+: > "$IDENTITY"
+
+for deb in docs/debs/*.deb; do
+  [ -f "$deb" ] || continue
+  ERR="$SCRATCH/dpkg.err"
+  if ! PACKAGE="$(dpkg-deb -f "$deb" Package 2>"$ERR")"; then
+    echo "cannot read package metadata from $deb:" >&2
+    sed 's/^/  /' "$ERR" >&2
+    exit 1
+  fi
+  PACKAGE="$(printf '%s' "$PACKAGE" | tr -d '\r')"
+  if [ -z "$PACKAGE" ]; then
+    echo "missing Package field in $deb" >&2
+    exit 1
+  fi
+  printf '%s\t%s\n' "$PACKAGE" "$deb" >> "$IDENTITY"
+done
+
+# One .deb per package. Two versions, or two filenames for the same version,
+# would make dpkg-scanpackages choose one arbitrarily.
+DUPLICATES="$(awk -F '\t' '
+  { count[$1]++; files[$1] = files[$1] " " $2 }
+  END {
+    for (package in count)
+      if (count[package] > 1)
+        print package ":" files[package]
+  }
+' "$IDENTITY" | sort)"
 
 if [ -n "$DUPLICATES" ]; then
-  echo "multiple versions found; remove old .deb files:" >&2
-  printf '  %s\n' $DUPLICATES >&2
+  echo "multiple .deb files provide the same package; keep one version per package:" >&2
+  printf '%s\n' "$DUPLICATES" | sed 's/^/  /' >&2
   exit 1
 fi
 
-OVERRIDE="$(mktemp "${TMPDIR:-/tmp}/kmy-override.XXXXXX")"
-trap 'rm -f "$OVERRIDE"' EXIT
-
 # Build the override file from the packages themselves so the Section shown in
 # Cydia always matches the .deb control metadata.
+OVERRIDE="$SCRATCH/override"
 : > "$OVERRIDE"
-for deb in docs/debs/*.deb; do
-  [ -f "$deb" ] || continue
-  package="$(dpkg-deb -f "$deb" Package)"
-  section="$(dpkg-deb -f "$deb" Section 2>/dev/null || true)"
-  [ -n "$section" ] || section="misc"
-  printf '%s optional %s\n' "$package" "$section" >> "$OVERRIDE"
-done
+while IFS=$'\t' read -r PACKAGE DEB; do
+  [ -n "$PACKAGE" ] || continue
+  SECTION="$(dpkg-deb -f "$DEB" Section 2>/dev/null || true)"
+  SECTION="$(printf '%s' "$SECTION" | tr -d '\r')"
+  [ -n "$SECTION" ] || SECTION="misc"
+  printf '%s optional %s\n' "$PACKAGE" "$SECTION" >> "$OVERRIDE"
+done < "$IDENTITY"
 
-# Filename entries stay relative to docs/, which is also the site root.
-(cd docs && dpkg-scanpackages debs "$OVERRIDE" > Packages)
+# Generate into a scratch directory first. Nothing in docs/ is replaced until
+# dpkg-scanpackages has succeeded without warnings.
+SCAN_ERR="$SCRATCH/scan.err"
+if ! (cd docs && dpkg-scanpackages debs "$OVERRIDE" > "$SCRATCH/Packages" 2> "$SCAN_ERR"); then
+  echo "dpkg-scanpackages failed:" >&2
+  sed 's/^/  /' "$SCAN_ERR" >&2
+  exit 1
+fi
 
-(cd docs && bzip2 -9 -k -f Packages && gzip -9 -k -f Packages)
+# "info: Wrote N entries" is normal; every other line is a warning or error.
+if grep -v '^dpkg-scanpackages: info:' "$SCAN_ERR" | grep -q .; then
+  echo "dpkg-scanpackages reported warnings; refusing to publish:" >&2
+  grep -v '^dpkg-scanpackages: info:' "$SCAN_ERR" | sed 's/^/  /' >&2
+  exit 1
+fi
+
+bzip2 -9 -c "$SCRATCH/Packages" > "$SCRATCH/Packages.bz2"
+gzip -9 -c "$SCRATCH/Packages" > "$SCRATCH/Packages.gz"
 
 digest_line() {
   local algorithm="$1"
   local file="$2"
+  local name="$3"
   local size hash
-  size="$(wc -c < "docs/$file" | tr -d ' ')"
-  hash="$(openssl dgst "-$algorithm" -r "docs/$file" | awk '{print $1}')"
-  printf ' %s %s %s\n' "$hash" "$size" "$file"
+  size="$(wc -c < "$file" | tr -d ' ')"
+  hash="$(openssl dgst "-$algorithm" -r "$file" | awk '{print $1}')"
+  printf ' %s %s %s\n' "$hash" "$size" "$name"
 }
 
 {
@@ -110,23 +154,29 @@ digest_line() {
   echo "Description: iOS 6 apps and tweaks by KMY."
   echo "Date: $(date -u '+%a, %d %b %Y %H:%M:%S UTC')"
   echo "MD5Sum:"
-  digest_line md5 Packages
-  digest_line md5 Packages.bz2
-  digest_line md5 Packages.gz
+  digest_line md5 "$SCRATCH/Packages" Packages
+  digest_line md5 "$SCRATCH/Packages.bz2" Packages.bz2
+  digest_line md5 "$SCRATCH/Packages.gz" Packages.gz
   echo "SHA1:"
-  digest_line sha1 Packages
-  digest_line sha1 Packages.bz2
-  digest_line sha1 Packages.gz
+  digest_line sha1 "$SCRATCH/Packages" Packages
+  digest_line sha1 "$SCRATCH/Packages.bz2" Packages.bz2
+  digest_line sha1 "$SCRATCH/Packages.gz" Packages.gz
   echo "SHA256:"
-  digest_line sha256 Packages
-  digest_line sha256 Packages.bz2
-  digest_line sha256 Packages.gz
-} > docs/Release
+  digest_line sha256 "$SCRATCH/Packages" Packages
+  digest_line sha256 "$SCRATCH/Packages.bz2" Packages.bz2
+  digest_line sha256 "$SCRATCH/Packages.gz" Packages.gz
+} > "$SCRATCH/Release"
+
+mv "$SCRATCH/Packages.bz2" docs/Packages.bz2
+mv "$SCRATCH/Packages.gz" docs/Packages.gz
+mv "$SCRATCH/Packages" docs/Packages
+mv "$SCRATCH/Release" docs/Release
 
 python3 tools/build_site.py --repo "$REPO_ROOT"
 
 if [ "$COMMIT" -eq 1 ]; then
-  git add docs
+  # The manifest and theme are inputs to the generated site, so stage them too.
+  git add docs data site
   if git diff --cached --quiet; then
     echo "No generated changes to commit."
   else
