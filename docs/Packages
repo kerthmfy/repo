@@ -1,14 +1,14 @@
 Package: com.kerthmfy.marquee.app
-Version: 1.0
+Version: 1.0.1
 Architecture: iphoneos-arm
 Maintainer: kerthmfy
 Installed-Size: 1220
 Depends: firmware (>= 6.0)
-Filename: debs/com.kerthmfy.marquee.app_1.0_iphoneos-arm.deb
-Size: 340074
-MD5sum: d8426d432603421c6044693a02a43e00
-SHA1: 12ec93b6e33983795e048097b64c47db96249296
-SHA256: 58a0f4f17c605442ead4ce49eb225eecbc64422f3b0650e6fc908314fe4a254a
+Filename: debs/com.kerthmfy.marquee.app_1.0.1_iphoneos-arm.deb
+Size: 340088
+MD5sum: 3dbb71170f516daf27c9edab85d5182a
+SHA1: 264dd448bae7841d14fd71f27a35b2192b1defc6
+SHA256: 7868d0e9e082bf266acd0622f8ce8a1965451fd49577f05ec31765dbbd491fcd
 Section: Entertainment
 Priority: optional
 Homepage: https://github.com/kerthmfy/Marquee-ios6
