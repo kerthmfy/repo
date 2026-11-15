@@ -6,16 +6,16 @@ Codename: ios
 Architectures: iphoneos-arm
 Components: main
 Description: iOS 6 apps and tweaks by KMY.
-Date: Sun, 15 Nov 2026 01:29:32 UTC
+Date: Sun, 15 Nov 2026 01:49:39 UTC
 MD5Sum:
- 2a96e75a47b1b476628432d4249c789c 694 Packages
- 93f18b9e98a28cb2ae5cc3101e580efa 501 Packages.bz2
- 24e7ba29abfd231d37c8493396b60d4f 462 Packages.gz
+ 0692b58cd5c2e0ad2efc61eff6da038e 696 Packages
+ 81e7d9629459108916316b9483986eeb 497 Packages.bz2
+ 694b135faa82b40da677e1b048c4742d 461 Packages.gz
 SHA1:
- f186076ceefd4fba18c19990d4ac33e605f7b322 694 Packages
- 8942cce7435eb0221ab3c6b6356d3ac6eac71e8f 501 Packages.bz2
- 048bae400531e7edb6560467a7709593fb74c651 462 Packages.gz
+ 821289452bcdb2ba2b88072404c5a9a9bb83b3fe 696 Packages
+ 4b38caacb359c974ea96aa07b7e980f8bc0078c7 497 Packages.bz2
+ fdc5ee93e0bb8aef513423812b6299d3a7794610 461 Packages.gz
 SHA256:
- 7154118715721e504f5c1d61c92ffb3e06ff3386589aec70b5cfb0252c1ca4eb 694 Packages
- ac46a0f0a75f2d5b1e1de0322a343c8e3a63e0ab79eb956ea3b0719e0b60c002 501 Packages.bz2
- 1285a7f309f250ae4bf08e6d1fb8e2ba2f0a34a18a72cbe770290f0c67f02ceb 462 Packages.gz
+ f1a0db1c403cb6f32b21ebdee19adb8db9bc37551e016912418e1c018f43de10 696 Packages
+ c115b6ee90e517120796d708798ee187e9b664d07555cd1adc2bac767a949cd3 497 Packages.bz2
+ e49d11bc90e3d9e7b433565188be065b53af80347efe4c50b94695e746420278 461 Packages.gz

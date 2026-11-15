@@ -5,17 +5,17 @@ Maintainer: kerthmfy
 Installed-Size: 1220
 Depends: firmware (>= 6.0)
 Filename: debs/com.kerthmfy.marquee.app_1.0_iphoneos-arm.deb
-Size: 340034
-MD5sum: 820140f26eb268c0561420063d61328f
-SHA1: 3115619fba2c68f144bac8c1cbfecbf169b2638e
-SHA256: 4f77b9124a82c6970eead9a63d70dedfbcb0b17e540d5c6f56d217649b8bbe18
+Size: 340074
+MD5sum: d8426d432603421c6044693a02a43e00
+SHA1: 12ec93b6e33983795e048097b64c47db96249296
+SHA256: 58a0f4f17c605442ead4ce49eb225eecbc64422f3b0650e6fc908314fe4a254a
 Section: Entertainment
 Priority: optional
 Homepage: https://github.com/kerthmfy/Marquee-ios6
 Description: A standalone Simkl client for iOS 6.
 Tag: purpose::application
 Author: kerthmfy
-Depiction: http://kerthmfy.github.io/repo/p/marquee/
-Icon: http://kerthmfy.github.io/repo/assets/icons/marquee.png
+Depiction: https://kerthmfy.github.io/repo/p/marquee/
+Icon: https://kerthmfy.github.io/repo/assets/icons/marquee.png
 Name: Marquee
 
