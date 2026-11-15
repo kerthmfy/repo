@@ -639,6 +639,7 @@ img {
 .meta-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .meta-table th {
@@ -655,8 +656,13 @@ img {
   padding: 9px 0;
   border-top: 1px solid #e3e4e6;
   color: #2d3237;
+  overflow-wrap: break-word;
   word-wrap: break-word;
   vertical-align: top;
+}
+
+.meta-table td a {
+  word-break: break-all;
 }
 
 .meta-table tr:first-child th,
