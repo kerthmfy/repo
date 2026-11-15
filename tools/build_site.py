@@ -100,8 +100,9 @@ def site_url(repo, suffix=""):
 def install_link(repo):
     """Build the cydia:// share link that adds this source.
 
-    The source inside the link is the HTTP URL: Cydia on iOS 6 cannot complete
-    a TLS handshake with GitHub Pages, so every URL Cydia fetches stays HTTP.
+    Cydia's apt transport on iOS 6 can read the HTTPS GitHub Pages source even
+    though the device's command-line curl only speaks TLS 1.0. The link uses
+    the same HTTPS source so Cydia and the catalog stay in sync.
     """
     return (
         "cydia://url/https://cydia.saurik.com/api/share#?source="

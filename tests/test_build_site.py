@@ -24,7 +24,7 @@ MANIFEST = {
     "repo": {
         "name": "KMY Repo",
         "tagline": "iOS 6 apps and tweaks, made to feel native.",
-        "url": "http://kerthmfy.github.io/repo/",
+        "url": "https://kerthmfy.github.io/repo/",
         "https_url": "https://kerthmfy.github.io/repo/",
         "github": "https://github.com/kerthmfy/repo",
     },
@@ -120,7 +120,7 @@ class BuildSiteTests(unittest.TestCase):
         self.assertTrue((self.root / "docs" / "assets" / "app.js").is_file())
         self.assertIn("Page not found", self.read("docs/404.html"))
 
-    def test_index_has_repo_name_package_version_and_http_source(self):
+    def test_index_has_repo_name_package_version_and_https_source(self):
         build_site.write_site(self.root)
 
         index = self.read("docs/index.html")
@@ -128,8 +128,8 @@ class BuildSiteTests(unittest.TestCase):
         self.assertIn("KMY Repo", index)
         self.assertIn("Marquee", index)
         self.assertIn("1.0", index)
-        self.assertIn("http://kerthmfy.github.io/repo/", index)
-        self.assertIn('data-copy="http://kerthmfy.github.io/repo/"', index)
+        self.assertIn("https://kerthmfy.github.io/repo/", index)
+        self.assertIn('data-copy="https://kerthmfy.github.io/repo/"', index)
         self.assertIn('href="assets/styles.css"', index)
         self.assertIn("-webkit-linear-gradient", self.read("docs/assets/styles.css"))
         self.assertIn("cydia://url/https://cydia.saurik.com/api/share#?source=", index)

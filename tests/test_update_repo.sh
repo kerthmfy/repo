@@ -25,7 +25,7 @@ cat > "$TMP/data/packages.json" <<'JSON'
   "repo": {
     "name": "KMY Test Repo",
     "tagline": "A tiny repo used by the tests.",
-    "url": "http://example.test/repo/",
+    "url": "https://example.test/repo/",
     "https_url": "https://example.test/repo/",
     "github": "https://github.com/example/repo"
   },
